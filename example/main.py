@@ -1,8 +1,8 @@
 from agents import Agent, Runner, AsyncOpenAI, set_default_openai_client, set_tracing_disabled, set_default_openai_api
 from agents import function_tool
-# from agents import enable_verbose_stdout_logging
 
 gemini_api_key = "AIzaSyAnzqTz4DLtEIoeYd2A6HGwre02Ns-TOn8"
+
 set_tracing_disabled(True)
 set_default_openai_api("chat_completions")
 
@@ -20,9 +20,16 @@ def addition(x: int, y: int) -> int:
 def subtraction(x: int, y: int) -> int:
     return x - y
 
-agent: Agent = Agent(name="Assistant", instructions="You are a helpful assistant", model="gemini-2.0-flash", tools=[addition, subtraction])
+@function_tool
+def multiplication(x: int, y: int) -> int:
+    return x * y
 
-# enable_verbose_stdout_logging()
+agent: Agent = Agent(
+    name="MathAgent",
+    instructions="You are a helpful math assistant that solves basic calculations.",
+    model="gemini-2.0-flash",
+    tools=[addition, subtraction, multiplication]
+)
 
-result = Runner.run_sync(agent, "What is 6 * 2")
+result = Runner.run_sync(agent, "What is 6 * 2?")
 print(result.final_output)
