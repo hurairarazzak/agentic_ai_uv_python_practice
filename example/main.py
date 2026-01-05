@@ -24,11 +24,15 @@ def subtraction(x: int, y: int) -> int:
 def multiplication(x: int, y: int) -> int:
     return x * y
 
+@function_tool
+def divison(x: int, y: int) -> int:
+    return x / y
+
 agent: Agent = Agent(
     name="MathAgent",
     instructions="You are a helpful math assistant that solves basic calculations.",
     model="gemini-2.0-flash",
-    tools=[addition, subtraction, multiplication]
+    tools=[addition, subtraction, multiplication, divison]
 )
 
 result = Runner.run_sync(agent, "What is 6 * 2?")
